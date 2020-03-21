@@ -1,10 +1,11 @@
 package com.todoList.app.entity;
 
-import lombok.AllArgsConstructor;
+import javax.validation.constraints.NotBlank;
+
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
 public class Todo {
+    @NotBlank
     private String name;
 }
