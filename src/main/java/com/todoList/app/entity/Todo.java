@@ -6,6 +6,8 @@ import lombok.Data;
 
 @Data
 public class Todo {
+    private Integer id;
+
     @NotBlank
     private String name;
 }
