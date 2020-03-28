@@ -1,13 +1,15 @@
 package com.todoList.app.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
 import com.todoList.app.entity.Todo;
+import com.todoList.app.service.TodoService;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,60 +19,53 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/todos")
 public class TodoController {
-    private List<Todo> todoList = new ArrayList<>();
+    @Autowired
+    private TodoService todoService;
 
     @GetMapping
     public ResponseEntity<List<Todo>> getAllTodo() {
-        return ResponseEntity.ok(this.todoList);
+        return ResponseEntity.status(HttpStatus.OK).body(this.todoService.getAllTodo());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Todo> getTodo(@PathVariable("id") Integer id) {
-        final Optional<Todo> todoOpt = this.todoList.stream().filter(t -> t.getId().equals(id)).findFirst();
+    public ResponseEntity<Todo> getTodo(@PathVariable("id") final Integer id) {
+        final Optional<Todo> todoOpt = this.todoService.getTodoById(id);
         if (!todoOpt.isPresent()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.ok(todoOpt.get());
+
+        return ResponseEntity.status(HttpStatus.OK).body(todoOpt.get());
     }
 
     @PostMapping
-    public ResponseEntity<Todo> addTodo(@RequestBody @Valid Todo todo) {
-        if (this.todoList.size() == 0) {
-            todo.setId(0);
-        } else {
-            todo.setId(this.todoList.get(this.todoList.size() - 1).getId() + 1);
-        }
-        this.todoList.add(todo);
-        return ResponseEntity.created(
-                ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(todo.getId()).toUri())
-                .body(todo);
+    public ResponseEntity<Todo> addTodo(@RequestBody @Valid final Todo todo) {
+        this.todoService.addTodo(todo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(todo);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Todo> updateTodo(@PathVariable("id") Integer id, @RequestBody @Valid Todo todo) {
-        final Optional<Todo> todoOpt = this.todoList.stream().filter(t -> t.getId().equals(id)).findFirst();
+    public ResponseEntity<Todo> updateTodo(@PathVariable("id") final Integer id, @RequestBody @Valid final Todo todo) {
+        final Optional<Todo> todoOpt = this.todoService.getTodoById(id);
         if (!todoOpt.isPresent()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        todo.setId(todoOpt.get().getId());
-        this.todoList.set(this.todoList.indexOf(todoOpt.get()), todo);
-        return ResponseEntity.noContent().build();
+        this.todoService.updateTodoById(id, todo);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Todo> deleteTodo(@PathVariable("id") Integer id) {
-        final Optional<Todo> todoOpt = this.todoList.stream().filter(t -> t.getId().equals(id)).findFirst();
+    public ResponseEntity<Todo> deleteTodo(@PathVariable("id") final Integer id) {
+        final Optional<Todo> todoOpt = this.todoService.getTodoById(id);
         if (!todoOpt.isPresent()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        this.todoList.remove(todoOpt.get());
+        this.todoService.deleteTodoById(id);
         return ResponseEntity.noContent().build();
     }
 }
