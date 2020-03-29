@@ -18,7 +18,7 @@ class AppApplicationTests {
 	private MockMvc mockMvc;
 
 	@Test
-	public void addTodo() throws Exception {
+	public void todo() throws Exception {
 		final JSONObject newTodo = new JSONObject();
 		newTodo.put("name", "learn java");
 
@@ -29,13 +29,31 @@ class AppApplicationTests {
 				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.id").value(0))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.name").value("learn java"));
-	}
 
-	@Test
-	public void getAllTodo() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/todos")).andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
 				.andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(1)));
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/todos/0")).andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.id").value(0))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.name").value("learn java"));
+
+		final JSONObject updateTodo = new JSONObject();
+		updateTodo.put("name", "learn golang");
+
+		this.mockMvc.perform(MockMvcRequestBuilders.put("/todos/0").contentType(MediaType.APPLICATION_JSON)
+				.content(updateTodo.toString())).andExpect(MockMvcResultMatchers.status().isNoContent());
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/todos/0")).andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.jsonPath("$.name").value("learn golang"));
+
+		this.mockMvc.perform(MockMvcRequestBuilders.delete("/todos/0"))
+				.andExpect(MockMvcResultMatchers.status().isNoContent());
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/todos/0"))
+				.andExpect(MockMvcResultMatchers.status().isNotFound());
 	}
 }
