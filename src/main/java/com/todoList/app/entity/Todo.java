@@ -1,4 +1,4 @@
-package com.todoList.app.entity;
+package com.todolist.app.entity;
 
 import javax.validation.constraints.NotBlank;
 

@@ -1,12 +1,12 @@
-package com.todoList.app.controller;
+package com.todolist.app.controller;
 
 import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
-import com.todoList.app.entity.Todo;
-import com.todoList.app.service.TodoService;
+import com.todolist.app.entity.Todo;
+import com.todolist.app.service.TodoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,10 +1,10 @@
-package com.todoList.app.service;
+package com.todolist.app.service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.todoList.app.entity.Todo;
+import com.todolist.app.entity.Todo;
 
 import org.springframework.stereotype.Service;
 
