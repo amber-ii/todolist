@@ -32,7 +32,7 @@ public class TodoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Todo> getTodo(@PathVariable("id") final Integer id) {
+    public ResponseEntity<Todo> getTodo(@PathVariable("id") final String id) {
         final Optional<Todo> todoOpt = this.todoService.getTodoById(id);
         if (!todoOpt.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -48,7 +48,7 @@ public class TodoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Todo> updateTodo(@PathVariable("id") final Integer id, @RequestBody @Valid final Todo todo) {
+    public ResponseEntity<Todo> updateTodo(@PathVariable("id") final String id, @RequestBody final Todo todo) {
         final Optional<Todo> todoOpt = this.todoService.getTodoById(id);
         if (!todoOpt.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -59,7 +59,7 @@ public class TodoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Todo> deleteTodo(@PathVariable("id") final Integer id) {
+    public ResponseEntity<Todo> deleteTodo(@PathVariable("id") final String id) {
         final Optional<Todo> todoOpt = this.todoService.getTodoById(id);
         if (!todoOpt.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

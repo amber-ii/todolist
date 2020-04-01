@@ -1,42 +1,39 @@
 package com.todolist.app.service;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import com.todolist.app.entity.Todo;
+import com.todolist.app.repository.TodoRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TodoService {
-    private List<Todo> todoList = new ArrayList<>();
+    @Autowired
+    private TodoRepository todoRepository;
 
     public List<Todo> getAllTodo() {
-        return this.todoList;
+        return this.todoRepository.findAll();
     }
 
-    public Optional<Todo> getTodoById(int id) {
-        return this.todoList.stream().filter(t -> t.getId().equals(id)).findFirst();
+    public Optional<Todo> getTodoById(String id) {
+        return this.todoRepository.findById(id);
     }
 
     public void addTodo(Todo todo) {
-        if (this.todoList.size() == 0) {
-            todo.setId(0);
-        } else {
-            todo.setId(this.todoList.get(this.todoList.size() - 1).getId() + 1);
-        }
-        this.todoList.add(todo);
+        this.todoRepository.insert(todo);
     }
 
-    public void updateTodoById(int id, Todo todo) {
-        final int idx = this.todoList.indexOf(this.getTodoById(id).get());
+    public void updateTodoById(String id, Todo todo) {
         todo.setId(id);
-        this.todoList.set(idx, todo);
+        todo.setUpdateAt(new Date());
+        this.todoRepository.save(todo);
     }
 
-    public void deleteTodoById(int id) {
-        final int idx = this.todoList.indexOf(this.getTodoById(id).get());
-        this.todoList.remove(idx);
+    public void deleteTodoById(String id) {
+        this.todoRepository.deleteById(id);
     }
 }
