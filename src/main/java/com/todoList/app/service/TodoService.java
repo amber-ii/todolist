@@ -1,11 +1,11 @@
-package com.todolist.app.service;
+package com.todoList.app.service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import com.todolist.app.entity.Todo;
-import com.todolist.app.repository.TodoRepository;
+import com.todoList.app.entity.Todo;
+import com.todoList.app.repository.TodoRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

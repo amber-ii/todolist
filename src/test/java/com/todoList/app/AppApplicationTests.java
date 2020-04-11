@@ -1,4 +1,4 @@
-package com.todolist.app;
+package com.todoList.app;
 
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;

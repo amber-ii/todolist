@@ -1,12 +1,11 @@
-package com.todolist.app.controller;
+package com.todoList.app.controller;
 
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.Valid;
 
-import com.todolist.app.entity.Todo;
-import com.todolist.app.service.TodoService;
+import com.todoList.app.entity.Todo;
+import com.todoList.app.service.TodoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,7 +41,7 @@ public class TodoController {
     }
 
     @PostMapping
-    public ResponseEntity<Todo> addTodo(@RequestBody @Valid final Todo todo) {
+    public ResponseEntity<Todo> addTodo(@RequestBody final Todo todo) {
         this.todoService.addTodo(todo);
         return ResponseEntity.status(HttpStatus.CREATED).body(todo);
     }
